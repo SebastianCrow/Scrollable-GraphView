@@ -218,6 +218,8 @@ import UIKit
     @IBInspectable open var dataPointLabelTopMargin: CGFloat = 10
     /// How far from the bottom of the view the data point labels should be rendered.
     @IBInspectable open var dataPointLabelBottomMargin: CGFloat = 0
+    /// The font for the top data point labels.
+    @IBInspectable open var topDataPointLabelColor: UIColor = UIColor.black
     /// The font for the data point labels.
     @IBInspectable open var dataPointLabelColor: UIColor = UIColor.black
     /// The colour for the data point labels.
@@ -1006,8 +1008,8 @@ import UIKit
             
             label.sizeToFit()
             
-            topLabel.text = (point < data.count) ? String(data[point]) : ""
-            topLabel.textColor = dataPointLabelColor
+            topLabel.text = (point < data.count) ? String(format: "%.0f", data[point]) : ""
+            topLabel.textColor = topDataPointLabelColor
             topLabel.font = dataPointLabelFont
             topLabelAssociations[topLabel] = point
             
@@ -1045,7 +1047,9 @@ import UIKit
             
             if let index = topLabelAssociations[label] {
                 let position = calculatePosition(atIndex: index, value: data[index])
-                label.frame.origin.y = position.y - 20
+                UIView.animate(withDuration: animationDuration, delay: 0, options: .curveEaseOut, animations: {
+                    label.frame.origin.y = position.y - 20
+                })
             }
         }
     }
