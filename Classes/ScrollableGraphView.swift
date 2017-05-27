@@ -779,8 +779,8 @@ import UIKit
         if(range.min == range.max) {
             
             let min = shouldRangeAlwaysStartAtZero ? 0 : range.min
-            let max = range.max + 1
-            
+			let max = shouldRangeAlwaysStartAtZero ? range.max : range.max + 1
+			
             return (min: min, max: max)
         }
         else if (shouldRangeAlwaysStartAtZero) {
