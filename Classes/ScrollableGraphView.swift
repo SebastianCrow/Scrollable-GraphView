@@ -302,12 +302,10 @@ import UIKit
     
     override public init(frame: CGRect) {
         super.init(frame: frame)
-        self.delegate = self
     }
     
     required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
-        self.delegate = self
     }
     
     deinit {
@@ -521,15 +519,9 @@ import UIKit
         self.addSubview(referenceLineView!)
     }
 
-    public func scrollViewDidScroll(_ scrollView: UIScrollView) {
-        // Reset the forced content offset
-        contentOffsetX = nil
-    }
-
     // If the view has changed we have to make sure we're still displaying the right data.
     override open func layoutSubviews() {
         super.layoutSubviews()
-        
         // while putting the view on the IB, we may get calls with frame too small
         // if frame height is too small we won't be able to calculate zeroYPosition
         // so make sure to proceed only if there is enough space
