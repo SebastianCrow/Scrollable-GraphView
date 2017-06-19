@@ -7,7 +7,9 @@ import UIKit
     // MARK: - Public Properties
     // Use these to customise the graph.
     // #################################
-    
+
+    open var contentOffsetX: CGFloat? = nil
+
     // Line Styles
     // ###########
     
@@ -300,10 +302,12 @@ import UIKit
     
     override public init(frame: CGRect) {
         super.init(frame: frame)
+        self.delegate = self
     }
     
     required public init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
+        self.delegate = self
     }
     
     deinit {
@@ -516,7 +520,12 @@ import UIKit
         referenceLineView?.set(range: self.range)
         self.addSubview(referenceLineView!)
     }
-    
+
+    public func scrollViewDidScroll(_ scrollView: UIScrollView) {
+        // Reset the forced content offset
+        contentOffsetX = nil
+    }
+
     // If the view has changed we have to make sure we're still displaying the right data.
     override open func layoutSubviews() {
         super.layoutSubviews()
@@ -530,6 +539,10 @@ import UIKit
         if(shouldShowLabels && dataPointLabelFont != nil) { availableGraphHeight -= (dataPointLabelFont!.pointSize + dataPointLabelTopMargin + dataPointLabelBottomMargin) }
         
         if availableGraphHeight > 0 {
+            // Force the content offset assigned from outside (if defined)
+            if let contentOffsetX = contentOffsetX {
+                self.contentOffset.x = contentOffsetX
+            }
             updateUI()
         }
     }
@@ -1503,7 +1516,7 @@ private class DataPointDrawingLayer: ScrollableGraphViewDrawingLayer {
     }
     
     private func createCircleDataPoint(centre: CGPoint) -> UIBezierPath {
-        return UIBezierPath(arcCenter: centre, radius: dataPointSize, startAngle: 0, endAngle: CGFloat(2.0 * M_PI), clockwise: true)
+        return UIBezierPath(arcCenter: centre, radius: dataPointSize, startAngle: 0, endAngle: CGFloat(2.0 * Double.pi), clockwise: true)
     }
     
     private func createSquareDataPoint(centre: CGPoint) -> UIBezierPath {
@@ -2024,6 +2037,6 @@ private struct Easings {
     
     static let easeOutElastic = { (t: Double) -> Double in
         var p = 0.3;
-        return pow(2,-10*t) * sin((t-p/4)*(2*M_PI)/p) + 1;
+        return pow(2,-10*t) * sin((t-p/4)*(2*Double.pi)/p) + 1;
     }
 }
