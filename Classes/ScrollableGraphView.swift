@@ -552,6 +552,8 @@ import UIKit
             
             if(shouldAnimateOnStartup) {
                 startAnimations(withStaggerValue: 0.15)
+                // Update the top labels positions
+                repositionActiveLabels()
             }
             
             // We're done setting up.
@@ -1029,7 +1031,7 @@ import UIKit
             
             
             let topLabelPosition = calculatePosition(atIndex: point, value: data[point])
-            let adjustedTopLabelPosition = CGPoint(x: topLabelPosition.x - topLabel.frame.width / 2, y: topLabelPosition.y - 20)
+            let adjustedTopLabelPosition = CGPoint(x: topLabelPosition.x - topLabel.frame.width / 2, y: position.y /* bottom position */ - 20)
             topLabel.frame = CGRect(origin: adjustedTopLabelPosition, size: topLabel.frame.size)
             
             let _ = labelsView.subviews.filter { $0.frame == label.frame }.map { $0.removeFromSuperview() }
