@@ -284,7 +284,7 @@ import UIKit
     private var activePointsInterval: CountableRange<Int> = -1 ..< -1 {
         didSet {
             if(oldValue.lowerBound != activePointsInterval.lowerBound || oldValue.upperBound != activePointsInterval.upperBound) {
-                if !isCurrentlySettingUp { activePointsDidChange() }
+                if !isCurrentlySettingUp && !data.isEmpty { activePointsDidChange() }
             }
         }
     }
@@ -292,7 +292,7 @@ import UIKit
     private var range: (min: Double, max: Double) = (0, 100) {
         didSet {
             if(oldValue.min != range.min || oldValue.max != range.max) {
-                if !isCurrentlySettingUp { rangeDidChange() }
+                if !isCurrentlySettingUp && !data.isEmpty { rangeDidChange() }
             }
         }
     }
@@ -543,9 +543,10 @@ import UIKit
         
         // Make sure we have data, if don't, just get out. We can't do anything without any data.
         guard data.count > 0 else {
+            reset()
             return
         }
-        
+
         // If the data has been updated, we need to re-init everything
         if (dataNeedsReloading) {
             setup()
