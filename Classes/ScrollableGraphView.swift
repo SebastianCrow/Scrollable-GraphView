@@ -1053,7 +1053,7 @@ import UIKit
         
         for label in topLabelPool.activeLabels {
             
-            if let index = topLabelAssociations[label] {
+            if let index = topLabelAssociations[label], data.indices.contains(index) {
                 let position = calculatePosition(atIndex: index, value: data[index])
                 UIView.animate(withDuration: animationDuration, delay: 0, options: .curveEaseOut, animations: {
                     label.frame.origin.y = position.y - 20
